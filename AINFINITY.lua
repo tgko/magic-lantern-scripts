@@ -16,39 +16,31 @@ function table.save(t, f) -- printTable by @marcotrosi
 		return err 
 	end
 	
-   local function printTableHelper(obj, cnt)
+	local function printTableHelper(obj, cnt)
 
-      local cnt = cnt or 0
+		local cnt = cnt or 0
 
-      if type(obj) == "table" then
-
-         file:write("\n", string.rep("\t", cnt), "{\n")
-         cnt = cnt + 1
-
-         for k,v in pairs(obj) do
-
-            if type(k) == "string" then
-               file:write(string.rep("\t",cnt), '["'..k..'"]', ' = ')
-            end
-
-            if type(k) == "number" then
-               file:write(string.rep("\t",cnt), "["..k.."]", " = ")
-            end
-
-            printTableHelper(v, cnt)
-            file:write(",\n")
-         end
-
-         cnt = cnt-1
-         file:write(string.rep("\t", cnt), "}")
-
-      elseif type(obj) == "string" then
-         file:write(string.format("%q", obj))
-
-      else
-         file:write(tostring(obj))
-      end 
-   end
+		if type(obj) == "table" then
+			file:write("\n", string.rep("\t", cnt), "{\n")
+			cnt = cnt + 1
+			for k,v in pairs(obj) do
+				if type(k) == "string" then
+				   file:write(string.rep("\t",cnt), '["'..k..'"]', ' = ')
+				end
+				if type(k) == "number" then
+				   file:write(string.rep("\t",cnt), "["..k.."]", " = ")
+				end
+				printTableHelper(v, cnt)
+				file:write(",\n")
+			end
+			cnt = cnt-1
+			file:write(string.rep("\t", cnt), "}")
+			elseif type(obj) == "string" then
+				file:write(string.format("%q", obj))
+			else
+				file:write(tostring(obj))
+		end 
+	end
 
 	file:write("-- Focus Settings for AutoInfinity.lua, please don't modify if you don't know what you're doing.\n")
 	file:write("-- Each lens can contain multiple focal lenght, values are steps that the autofocus motor has to go from soft limit to infinity.\n")
@@ -91,7 +83,8 @@ end
 
 
 function setInfinity() -- Main function to create a preset
-    menu.close()
+    
+	menu.close()
     console.show()
 	
 	if not lens.af then --should be picked up by menu settings, but leaving it just to be sure
@@ -129,6 +122,7 @@ end
 
 
 function getInfinity() -- Main function to reach a preset
+	
 	menu.close()
     console.show()
 	
@@ -173,10 +167,9 @@ function getInfinity() -- Main function to reach a preset
 end
 
 
-keymenuSet = menu.new
-				   
+keymenuSet = menu.new				   
 {
- name   = "Set Infinity",
+	name   = "Set Infinity",
     help   = "Set an infinity preset for this lens & focal length",
 	parent = "Focus",
 	depends_on = DEPENDS_ON.AUTOFOCUS,
