@@ -91,11 +91,12 @@ function setInfinity() -- Main function to create a preset
         print("Please enable autofocus and restart the script")
     else  
 		if not lv.running then lv.start() end --switch to LiveView													
+		
 		local settings = table.load()
 		local i = 0
 		
-		local lens_focal = lens.focal_length -- failsafe if focal length can't be read
-		if not(lens_focal) then lens_focal = "0" end
+		local lens_focal = lens.focal_length
+		if not(lens_focal) then lens_focal = "0" end  -- failsafe if focal length can't be read
 						   
 		print "Setting infinity for:"
 		print(lens.name)
@@ -105,12 +106,7 @@ function setInfinity() -- Main function to create a preset
 		while (lens.focus(-1,1,true,true))do -- Finding how many steps from infinity to soft limit
 			i = i+1
 		end
-  
-		local focal_length = lens.focal_length
-		if not(focal_length) then -- failsafe for uncompatible lenses
-			print("Couldn't read focal lenght, setting to zero. \nThis will still work but you only get one setting for this lens.")
-			focal_length = 0 
-		end																												   
+  																											   
 		settings = saveFile(settings,focal_length, i)				  
 	 
 	end
@@ -144,6 +140,10 @@ function getInfinity() -- Main function to reach a preset
 			local steps_to_infinity = settings[lens.name][lens_focal] -- getting preset from database
 			if not steps_to_infinity then 
 				print("Unable to find preset for this lens at this focal length, please use Set Infinity first.")
+				print "Press any key to exit."
+				
+				key.wait()
+				console.hide()
 				return 
 			end -- 
    
